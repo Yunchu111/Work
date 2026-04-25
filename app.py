@@ -4,10 +4,12 @@ from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
 import pandas as pd
+import streamlit as st
+import streamlit.components.v1 as components
 
 # 初始化 App
-app = dash.Dash(__name__,title="六朝风雨路，一桥一春秋", external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+dash_app = dash.Dash(__name__,title="六朝风雨路，一桥一春秋", external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash_app
 # ==========================================
 # 1. 核心数据与图表定义
 # ==========================================
@@ -68,22 +70,22 @@ bridge_data = [
 # 2. 详细史实数据库
 # ==========================================
 details_db = {
-    "古桥概览": {
-        "title": "### 🏛️ 中华营造：古桥里的科学与文明",
-        "desc": (
-            "**【建筑成就：世界桥梁史的丰碑】**<br>"
-            "中国古桥以**“拱、梁、索”**三大体系独步天下。赵州桥首创“敞肩拱”比欧洲早千年，广济桥“十八梭船”开启世界启闭式桥梁先河。这些成就不仅展示了古代工匠对力学与水文的高超驾驭，更弘扬了中华优秀自然科学成就。<br><br>"
-
-            "**【杰出科学家与工匠精神】**<br>"
-            "每一座名桥背后都屹立着一位科学巨匠。如**隋代李春**（赵州桥设计者），他突破传统半圆拱限制，首创圆弧拱与敞肩结构，体现了**“勇于探索、精益求精”**的科学家精神；唐代王仲舒（宝带桥）捐带建桥，展现了**“造福桑梓、公而忘私”**的儒匠情怀。<br><br>"
-
-            "**【建筑著作与专著传承】**<br>"
-            "虽然桥梁专著多散佚，但**《营造法式》**（宋·李诫）与**《工程做法则例》**（清）中保留了大量桥梁营造的“法式”与“则例”。这些古籍记录了从选材、地基处理到结构拼接的严密逻辑，是弘扬中华优秀古建筑学专著与智慧的活化石。<br><br>"
-
-            "**【文化传承：天人合一的哲学】**<br>"
-            "古桥不仅是交通设施，更是**“天人合一”**哲学的载体。从“长虹卧波”的审美意境，到“修桥补路”的功德文化，古桥连接了山水，也连接了人心。保护古桥，即是守护中华优秀古建筑文明与文化传承的根脉。"
-        ),
-        "img": "/assets/bridge/总览-08.jpg"
+     "古桥概览": {
+            "title": "### 🏛️ 中华营造：古桥里的科学与文明",
+            "desc": (
+                "**【建筑成就：世界桥梁史的丰碑】**<br>"
+                "中国古桥以**“拱、梁、索”**三大体系独步天下。赵州桥首创“敞肩拱”比欧洲早千年，广济桥“十八梭船”开启世界启闭式桥梁先河。这些成就不仅展示了古代工匠对力学与水文的高超驾驭，更弘扬了中华优秀自然科学成就。<br><br>"
+                
+                "**【杰出科学家与工匠精神】**<br>"
+                "每一座名桥背后都屹立着一位科学巨匠。如**隋代李春**（赵州桥设计者），他突破传统半圆拱限制，首创圆弧拱与敞肩结构，体现了**“勇于探索、精益求精”**的科学家精神；唐代王仲舒（宝带桥）捐带建桥，展现了**“造福桑梓、公而忘私”**的儒匠情怀。<br><br>"
+                
+                "**【建筑著作与专著传承】**<br>"
+                "虽然桥梁专著多散佚，但**《营造法式》**（宋·李诫）与**《工程做法则例》**（清）中保留了大量桥梁营造的“法式”与“则例”。这些古籍记录了从选材、地基处理到结构拼接的严密逻辑，是弘扬中华优秀古建筑学专著与智慧的活化石。<br><br>"
+                
+                "**【文化传承：天人合一的哲学】**<br>"
+                "古桥不仅是交通设施，更是**“天人合一”**哲学的载体。从“长虹卧波”的审美意境，到“修桥补路”的功德文化，古桥连接了山水，也连接了人心。保护古桥，即是守护中华优秀古建筑文明与文化传承的根脉。"
+            ),
+            "img": "/assets/bridge/总览-08.jpg"
     },
     "赵州桥": {
         "title": "### 隋朝·赵州桥",
@@ -93,7 +95,7 @@ details_db = {
         "img": "/assets/bridge/赵州桥-06.png"
     },
     "宝带桥": {
-        "title": "### 唐代·宝带桥",
+        "title": "### 🪵 唐代·宝带桥",
         "desc": "**【核心数据】** 全长316.8米，53孔连拱。<br>"
                 "**【硬核科技】** **柔性墩与连续拱券**。为适应大运河软土地基，采用了能通过微小变形吸收冲击的“柔性墩”。53个桥孔如连环扣，将荷载均匀传递，即便单孔受损也不会导致全桥坍塌。<br>"
                 "**【历史价值】** 它是大运河漕运的咽喉，见证了古代江南经济的繁荣与漕运制度的兴衰，被誉为“运河第一桥”。",
@@ -129,7 +131,6 @@ details_db = {
     }
 }
 
-
 # ==========================================
 # 3. 图表函数
 # ==========================================
@@ -149,6 +150,7 @@ def draw_parallel_wave_animation():
 
     total_frames = 60
     fig = go.Figure()
+
 
     # 1. 定义竖排文字
     raw_title = "历代交通古桥数量演变"
@@ -172,13 +174,16 @@ def draw_parallel_wave_animation():
         align="center",
         valign="top",
 
+
         bgcolor="rgba(250, 245, 230, 0.9)",
-        bordercolor="#B22222",  # 朱红色
+        bordercolor="#B22222",#朱红色
         borderwidth=1,
         borderpad=8,
 
+
         opacity=1.0,  # 整体不透明度 (Plotly 中用 opacity 控制，而不是在 style 里写 opacity)
     )
+
 
     fig.add_trace(go.Bar(
         x=dynasties, y=[0] * 6, name="数量",
@@ -268,12 +273,8 @@ def create_treemap():
         ),
         customdata=customdata,
 
-        maxdepth=2,
-
-        hovertemplate=[''] + [
-            '<b>%{label}</b><br>长度：%{value}米<br>%{customdata}<br><span style="font-size: 10px; color: #888;">（注释）图中方块相对大小代表桥梁相对长度</span><extra></extra>'] * len(
-            bridge_data),
-        hoverinfo='text+value'
+        hovertemplate=[''] + ['<b>%{label}</b><br>长度：%{value}米<br>%{customdata}<br><span style="font-size: 10px; color: #888;">（注释）图中方块相对大小代表桥梁相对长度</span><extra></extra>'] * len(bridge_data),
+        hoverinfo = 'text+value'
     ))
 
     fig.update_layout(
@@ -284,7 +285,6 @@ def create_treemap():
         font=dict(family="STKaiti", size=14),
     )
     return fig
-
 
 def create_animation_figure():
     fig = go.Figure()
@@ -304,7 +304,7 @@ def create_animation_figure():
         fillcolor="rgba(250, 245, 230, 1)", line_width=0, layer="above"
     )
 
-    num_steps = 100
+    num_steps = 90
     frames = []
     for i in range(num_steps + 1):
         progress = i / num_steps
@@ -328,157 +328,18 @@ def create_animation_figure():
         ),
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5, bgcolor='rgba(0,0,0,0)'),
         paper_bgcolor='rgba(0,0,0,0)',
-        xaxis=dict(showline=False, linewidth=0, linecolor='#8B5E3C', mirror=False,
-                   tickfont=dict(family="STSong", size=12), range=[-0.5, 5.5]),
-        yaxis=dict(showline=False, linewidth=0, linecolor='#8B5E3C', mirror=False, range=[-5, 110],
-                   tickfont=dict(family="STSong", size=12)),
+        xaxis=dict(showline=False, linewidth=0, linecolor='#8B5E3C', mirror=False, tickfont=dict(family="STSong", size=12),range=[-0.5,5.5]),
+        yaxis=dict(showline=False, linewidth=0, linecolor='#8B5E3C', mirror=False, range=[-5, 110], tickfont=dict(family="STSong", size=12)),
         height=500,
 
+
         updatemenus=[dict(
-            type="buttons", buttons=[dict(label="画卷展开", method="animate", args=[None, {
-                "frame": {"duration": 30, "redraw": True}, "transition": {"duration": 0}, "fromcurrent": True}])],
+            type="buttons", buttons=[dict(label="画卷展开", method="animate", args=[None, {"frame": {"duration": 30, "redraw": True}, "transition": {"duration": 0}, "fromcurrent": True}])],
             x=0.85, y=1.05, xanchor="left", yanchor="bottom", pad={"r": 10}, showactive=False,
         )],
 
     )
     return fig
-
-
-def create_ghost_chart(title, color, data_y):
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=[0, 1, 2, 3, 4, 5], y=data_y,
-        mode='lines+markers',
-        line=dict(color=color, width=4, shape='spline'),
-        marker=dict(size=10, color=color),
-        name=title, hoverinfo='y'
-    ))
-    yaxis_config = dict(showgrid=False, zeroline=False, visible=False, showticklabels=False, scaleanchor="x",
-                        scaleratio=1)
-    fig.update_layout(
-        title=dict(text=title, font=dict(color='#fff', size=16, family="Arial"), x=0.5, y=0.9, xanchor='center'),
-        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-        margin=dict(l=20, r=20, t=40, b=20),
-        xaxis=dict(showgrid=False, zeroline=False, visible=False, showticklabels=False),
-        yaxis=yaxis_config, showlegend=False, height=250, clickmode='event+select'
-    )
-    return fig
-
-
-# ==========================================
-# 4. 配置区域 (新增左上角概览配置)
-# ==========================================
-CONFIG = [
-    {
-        "id": "btn_1",
-        "label": "隋朝·赵州桥",
-        "pos": {"top": "7.5%", "left": "68%"},
-        "color": "#8B4513",
-        "content": [
-            html.H3("隋朝·赵州桥", style={'margin': '0 0 10px 0', 'color': '#8B4513'}),
-            html.P("核心标签：天下第一敞肩石拱桥", style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：比欧洲同类敞肩拱桥技术早1200余年", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：由隋代工匠李春主持设计，是世界现存最古老、保存最完整的敞肩石拱桥。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    },
-    {
-        "id": "btn_2",
-        "label": "唐代·宝带桥",
-        "pos": {"top": "21%", "left": "24%"},
-        "color": "#8B0000",
-        "content": [
-            html.H3("唐代·宝带桥", style={'margin': '0 0 10px 0', 'color': '#8B0000'}),
-            html.P("核心标签：中国现存最长古代连拱石桥·大运河漕运命脉",
-                   style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：53孔连拱柔性墩设计，抗震结构", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：始建于唐代元和年间，由苏州刺史王仲舒捐宝带资助修建，横跨京杭大运河。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    },
-
-    {
-        "id": "btn_3",
-        "label": "金代·卢沟桥",
-        "pos": {"top": "36%", "left": "62.6%"},
-        "color": "#A52A2A",
-        "content": [
-            html.H3("金代·卢沟桥", style={'margin': '0 0 10px 0', 'color': '#A52A2A'}),
-            html.P("核心标签：燕京八景之一·华北官道咽喉", style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：501只石狮形态各异，石作雕刻艺术巅峰", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：始建于金代大定年间，横跨永定河，是“卢沟晓月”的所在地。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    },
-
-    {
-        "id": "btn_4",
-        "label": "南宋·广济桥",
-        "pos": {"top": "60%", "left": "24.2%"},
-        "color": "#FF8C00",
-        "content": [
-            html.H3("南宋·广济桥", style={'margin': '0 0 10px 0', 'color': '#FF8C00'}),
-            html.P("核心标签：世界最早开合式石拱桥·海上丝绸之路门户", style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：首创“十八梭船廿四洲”开合式设计", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：始建于南宋乾道年间，横跨韩江，是中国四大古桥之一。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    },
-    {
-        "id": "btn_5",
-        "label": "明朝·八里桥",
-        "pos": {"top": "68%", "left": "72.6%"},
-        "color": "#B22222",
-        "content": [
-            html.H3("明朝·八里桥", style={'margin': '0 0 10px 0', 'color': '#B22222'}),
-            html.P("核心标签：运河上的古战场·京畿漕运要冲", style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：“八里桥不落桅”的民间传说", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：始建于明代正统年间，横跨通惠河，是明清时期京城通往通州的官道咽喉。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    },
-    {
-        "id": "btn_6",
-        "label": "清代·五亭桥",
-        "pos": {"top": "83%", "left": "33.2%"},
-        "color": "#32CD32",
-        "content": [
-            html.H3("清代·五亭桥", style={'margin': '0 0 10px 0', 'color': '#32CD32'}),
-            html.P("核心标签：中国最美的桥·瘦西湖点睛之笔", style={'fontSize': '16px', 'fontWeight': 'bold'}),
-            html.P("震撼亮点：十五个桥洞各衔一月，形成“月满中天”奇景", style={'fontSize': '14px', 'color': '#d35400'}),
-            html.P("简介：建于清代乾隆年间，位于扬州瘦西湖上，是中国古代桥梁与园林艺术结合的巅峰之作。",
-                   style={'fontSize': '14px', 'lineHeight': '1.5'})
-        ]
-    }
-]
-
-card_states = {item["id"]: False for item in CONFIG}
-
-# ==========================================
-# 5. 布局架构
-# ==========================================
-styles = {
-    'bg_image': {
-        'position': 'absolute',
-        'top': 0,
-        'left': 0,
-        'width': '100vw',  # 强制宽度填满
-        'height': '100vh',  # 强制高度填满
-        'zIndex': 0,
-        'pointerEvents': 'none',
-        'backgroundColor': '#000'
-    },
-    'corner_box': {
-        'position': 'absolute',
-        'zIndex': 10,
-        'display': 'flex',
-        'alignItems': 'center',
-        'justifyContent': 'center',
-        'boxSizing': 'border-box',
-        'overflow': 'hidden'
-    }
-}
-
 
 def generate_center_controls():
     controls = []
@@ -528,13 +389,141 @@ def generate_center_controls():
         controls.append(btn)
     return controls
 
+def create_ghost_chart(title, color, data_y):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=[0, 1, 2, 3, 4, 5], y=data_y,
+        mode='lines+markers',
+        line=dict(color=color, width=4, shape='spline'),
+        marker=dict(size=10, color=color),
+        name=title, hoverinfo='y'
+    ))
+    yaxis_config = dict(showgrid=False, zeroline=False, visible=False, showticklabels=False, scaleanchor="x", scaleratio=1)
+    fig.update_layout(
+        title=dict(text=title, font=dict(color='#fff', size=16, family="Arial"), x=0.5, y=0.9, xanchor='center'),
+        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=20, r=20, t=40, b=20),
+        xaxis=dict(showgrid=False, zeroline=False, visible=False, showticklabels=False),
+        yaxis=yaxis_config, showlegend=False, height=250, clickmode='event+select'
+    )
+    return fig
+
+# ==========================================
+# 4. 配置区域 (新增左上角概览配置)
+# ==========================================
+CONFIG = [
+    {
+        "id": "btn_1",
+        "label": "隋朝·赵州桥",
+        "pos": {"top": "7.5%", "left": "68%"},
+        "color": "#8B4513",
+        "content": [
+            html.H3("隋朝·赵州桥", style={'margin': '0 0 10px 0', 'color': '#8B4513'}),
+            html.P("核心标签：天下第一敞肩石拱桥", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：比欧洲同类敞肩拱桥技术早1200余年", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：由隋代工匠李春主持设计，是世界现存最古老、保存最完整的敞肩石拱桥。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    },
+    {
+        "id": "btn_2",
+        "label": "唐代·宝带桥",
+        "pos": {"top": "21%", "left": "24%"},
+        "color": "#8B0000",
+        "content": [
+            html.H3("唐代·宝带桥", style={'margin': '0 0 10px 0', 'color': '#8B0000'}),
+            html.P("核心标签：中国现存最长古代连拱石桥·大运河漕运命脉", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：53孔连拱柔性墩设计，抗震结构", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：始建于唐代元和年间，由苏州刺史王仲舒捐宝带资助修建，横跨京杭大运河。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    },
+
+    {
+        "id": "btn_3",
+        "label": "金代·卢沟桥",
+        "pos": {"top": "36%", "left": "62.6%"},
+        "color": "#A52A2A",
+        "content": [
+            html.H3("金代·卢沟桥", style={'margin': '0 0 10px 0', 'color': '#A52A2A'}),
+            html.P("核心标签：燕京八景之一·华北官道咽喉", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：501只石狮形态各异，石作雕刻艺术巅峰", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：始建于金代大定年间，横跨永定河，是“卢沟晓月”的所在地。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    },
+
+    {
+        "id": "btn_4",
+        "label": "南宋·广济桥",
+        "pos": {"top": "60%", "left": "24.2%"},
+        "color": "#FF8C00",
+        "content": [
+            html.H3("南宋·广济桥", style={'margin': '0 0 10px 0', 'color': '#FF8C00'}),
+            html.P("核心标签：世界最早开合式石拱桥·海上丝绸之路门户", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：首创“十八梭船廿四洲”开合式设计", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：始建于南宋乾道年间，横跨韩江，是中国四大古桥之一。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    },
+    {
+        "id": "btn_5",
+        "label": "明朝·八里桥",
+        "pos": {"top": "68%", "left": "72.6%"},
+        "color": "#B22222",
+        "content": [
+            html.H3("明朝·八里桥", style={'margin': '0 0 10px 0', 'color': '#B22222'}),
+            html.P("核心标签：运河上的古战场·京畿漕运要冲", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：“八里桥不落桅”的民间传说", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：始建于明代正统年间，横跨通惠河，是明清时期京城通往通州的官道咽喉。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    },
+    {
+        "id": "btn_6",
+        "label": "清代·五亭桥",
+        "pos": {"top": "83%", "left": "33.2%"},
+        "color": "#32CD32",
+        "content": [
+            html.H3("清代·五亭桥", style={'margin': '0 0 10px 0', 'color': '#32CD32'}),
+            html.P("核心标签：中国最美的桥·瘦西湖点睛之笔", style={'fontSize': '16px', 'fontWeight': 'bold'}),
+            html.P("震撼亮点：十五个桥洞各衔一月，形成“月满中天”奇景", style={'fontSize': '14px', 'color': '#d35400'}),
+            html.P("简介：建于清代乾隆年间，位于扬州瘦西湖上，是中国古代桥梁与园林艺术结合的巅峰之作。", style={'fontSize': '14px', 'lineHeight': '1.5'})
+        ]
+    }
+]
+
+card_states = {item["id"]: False for item in CONFIG}
+
+# ==========================================
+# 5. 布局架构
+# ==========================================
+styles = {
+    'bg_image': {
+        'position': 'absolute',
+        'top': 0,
+        'left': 0,
+        'width': '100vw',      # 强制宽度填满
+        'height': '100vh',     # 强制高度填满
+        'zIndex': 0,
+        'pointerEvents': 'none',
+        'backgroundColor': '#000'
+    },
+    'corner_box': {
+        'position': 'absolute',
+        'zIndex': 10,
+        'display': 'flex',
+        'alignItems': 'center',
+        'justifyContent': 'center',
+        'boxSizing': 'border-box',
+        'overflow': 'hidden'
+    }
+}
+
+
+
+
 
 app.layout = html.Div([
     html.Img(src="/assets/背景-07.jpg", style=styles['bg_image']),
     html.Div([
         html.Div(
-            children=[dcc.Graph(id='treemap-chart', figure=create_treemap(), config={'displayModeBar': False},
-                                style={'height': '100%', 'width': '100%'})],
+            children=[dcc.Graph(id='treemap-chart', figure=create_treemap(), config={'displayModeBar': False}, style={'height': '100%', 'width': '100%'})],
             style={
                 'position': 'absolute', 'bottom': '2%', 'left': '0%',
                 'width': '22vw', 'height': '30vh', 'zIndex': 80,
@@ -552,9 +541,7 @@ app.layout = html.Div([
         ),
         html.Div(
             id='bridge-container',
-            children=[
-                dcc.Graph(id='bridge-animation', figure=create_animation_figure(), config={'displayModeBar': False},
-                          style={'height': '100%', 'width': '100%'})],
+            children=[dcc.Graph(id='bridge-animation', figure=create_animation_figure(), config={'displayModeBar': False}, style={'height': '100%', 'width': '100%'})],
             style={
                 'position': 'absolute', 'top': '2.7%', 'right': '0%',
                 'width': '30%', 'height': '50%', 'backgroundColor': 'transparent',
@@ -562,8 +549,7 @@ app.layout = html.Div([
             }
         ),
         html.Div(
-            children=[dcc.Graph(id='parallel-wave-chart', figure=draw_parallel_wave_animation(),
-                                config={'displayModeBar': False}, style={'width': '100%', 'height': '100%'})],
+            children=[dcc.Graph(id='parallel-wave-chart', figure=draw_parallel_wave_animation(), config={'displayModeBar': False}, style={'width': '100%', 'height': '100%'})],
             style={
                 'position': 'absolute', 'bottom': '0%', 'right': '0%',
                 'width': '24vw', 'height': '55vh', 'zIndex': 90,
@@ -586,7 +572,6 @@ app.layout = html.Div([
     'overflow': 'hidden', 'display': 'flex', 'justifyContent': 'center',
     'alignItems': 'center', 'backgroundColor': '#000'
 })
-
 
 # ==========================================
 # 6. 交互逻辑 (兼容概览)
@@ -631,7 +616,7 @@ def toggle_cards(n_clicks_btns, n_clicks_cards):
             'opacity': 1,
             'pointerEvents': 'auto',
             'boxShadow': f'0 10px 30px rgba(0,0,0,0.4), 0 0 15px {color}60',
-            'zIndex': 9999,  # 强制最高层级
+            'zIndex': 9999,  #强制最高层级
             'position': 'fixed',
             'width': '320px',
             'maxWidth': '28vw',
@@ -716,5 +701,11 @@ def update_bridge_detail(clickData={'points': [{'label': '中国古桥概览'}]}
     return content, show_style
 
 
-if __name__ == '__main__':
-    app.run(debug=False)
+st.set_page_config(layout="wide")
+st.title("六朝风雨路，一桥一春秋")
+html_string = dash_app.index()
+components.html(
+    html_string,
+    height=1000,  # 根据你的页面长度调整高度
+    scrolling=False
+)
