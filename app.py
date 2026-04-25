@@ -702,7 +702,6 @@ def update_bridge_detail(clickData={'points': [{'label': '中国古桥概览'}]}
 
 
 st.set_page_config(layout="wide")
-st.title("六朝风雨路，一桥一春秋")
 html_string = dash_app.index()
 components.html(
     html_string,
